@@ -1,0 +1,31 @@
+*{
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+
+button{
+    cursor:pointer
+}
+
+#formulario{
+    margin: 10px;
+}
+
+#ulLista{
+    border: 2px solid black;
+    margin: 10px;
+    padding: 20px;
+}
+
+#ulLista li{
+    list-style-type: none;
+}
+
+#ulLista li:first-child:has(+ li){
+    display: none;
+}
+
+
