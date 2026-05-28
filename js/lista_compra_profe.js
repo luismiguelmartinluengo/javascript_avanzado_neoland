@@ -1,13 +1,29 @@
 import { ARTICLE_TYPES, ArticleFactory, articuloLeche } from "../classes/Article.js"
+import { ShoppingList } from "../classes/ShoppingList.js"
 import { LocalStore } from "../classes/LocalStore.js"
 
 //Patron Factory
 const fabricaArticulos = new ArticleFactory
+//Patron Singleton
+let listaCompra = (function(){
 
+    function create(){
+        const dataStore = new LocalStore('lista-compra')
+        return new ShoppingList(dataStore)
+    }//End create
 
+    let shoppingListInstance
 
+    return{
+        get: () =>{
+            if (!shoppingListInstance){
+                shoppingListInstance = create()
+            }//End if
+            return shoppingListInstance
+        }//end get
+    }
 
-
+})()
 
 
 document.addEventListener('DOMContentLoaded', onDOMContentLoaded)
@@ -60,10 +76,10 @@ function onNewListClick(e){
 }//End onNewListClick
 
 function loadShoppingList(){
-    const listaCompra = JSON.parse(window.localStorage.getItem('lista-compra')) || []
-    if (listaCompra.length > 0){
-        for(let articulo of listaCompra){
-            addToElementList(articulo.name)
+    
+    if (listaCompra.get().basket.length > 0){
+        for(let articulo of listaCompra.get().basket){
+            addToElementList(articulo)
         }//End for
     }//End if
 }//End loadShoppingList
@@ -72,24 +88,22 @@ function addToShoppingList(){
     const nuevoArticulo = document.getElementById('articulo').value
 
     if(nuevoArticulo !== ''){
-        const listaCompra = JSON.parse(window.localStorage.getItem('lista-compra')) || []
-        const nuevaListaCompra = [...listaCompra, {name:nuevoArticulo}]
-        window.localStorage.setItem('lista-compra', JSON.stringify(nuevaListaCompra))
-        addToElementList(nuevoArticulo)
+        const nuevoObjetoArticulo = fabricaArticulos.createArticle(ARTICLE_TYPES.SIMPLE, nuevoArticulo)
+        listaCompra.get().addItem(nuevoObjetoArticulo)
+        addToElementList(nuevoObjetoArticulo)
     }//End if
 }//End addToShoppingList
 
 function addToElementList(nuevoArticulo){
     const listaArticulos = document.getElementById('lista')
     const elemento = document.createElement('li')
-    elemento.innerText = nuevoArticulo
+    elemento.innerText = nuevoArticulo.name
     listaArticulos.appendChild(elemento)
     resetFormState()
 }//End addToElementList
 
 function resetShoppingList(){
-    const listaArticulos = document.getElementById('lista')
-    window.localStorage.removeItem('lista-compra')
+    listaCompra.get().emptyBasket()
     while (listaArticulos.children.length > 1){
         listaArticulos.lastElementChild.remove()
     }//End while
