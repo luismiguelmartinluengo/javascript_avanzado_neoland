@@ -1,3 +1,15 @@
+import { ARTICLE_TYPES, ArticleFactory, articuloLeche } from "../classes/Article.js"
+import { LocalStore } from "../classes/LocalStore.js"
+
+//Patron Factory
+const fabricaArticulos = new ArticleFactory
+
+
+
+
+
+
+
 document.addEventListener('DOMContentLoaded', onDOMContentLoaded)
 
 //Esto funciona como constructor
