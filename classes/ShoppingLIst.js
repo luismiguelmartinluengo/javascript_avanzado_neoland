@@ -23,6 +23,7 @@ export class ShoppingList{
 
     addItem(newItem){
         if (typeof newItem.name === 'string'){
+            this.#basket.push(newItem)
             this._addDataStore(newItem)
         }else{
             try{
@@ -35,6 +36,7 @@ export class ShoppingList{
     }//End addItem
 
     emptyBasket(){
+        this.#basket = []
         this._resetDataStore()
     }//End emptyBasket
 

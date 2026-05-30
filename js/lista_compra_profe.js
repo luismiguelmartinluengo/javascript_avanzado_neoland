@@ -1,6 +1,7 @@
 import { ARTICLE_TYPES, ArticleFactory, articuloLeche } from "../classes/Article.js"
 import { ShoppingList } from "../classes/ShoppingList.js"
 import { LocalStore } from "../classes/LocalStore.js"
+import { logBasket } from "../classes/log.js"
 
 //Patron Factory
 const fabricaArticulos = new ArticleFactory
@@ -17,7 +18,9 @@ let listaCompra = (function(){
     return{
         get: () =>{
             if (!shoppingListInstance){
-                shoppingListInstance = create()
+                // Aquí se crea la instancia de lista de la compra a través de logbasket para añadirle el decorador
+                // que añade a la instancia el método log
+                shoppingListInstance = logBasket(create())
             }//End if
             return shoppingListInstance
         }//end get
@@ -103,6 +106,7 @@ function addToElementList(nuevoArticulo){
 }//End addToElementList
 
 function resetShoppingList(){
+    const listaArticulos = document.getElementById('lista')
     listaCompra.get().emptyBasket()
     while (listaArticulos.children.length > 1){
         listaArticulos.lastElementChild.remove()
@@ -115,4 +119,6 @@ function resetFormState(){
     const botonArticulo = document.getElementById('nuevoArticulo')
     campoArticulo.value = ''
     botonArticulo.setAttribute('disabled', undefined)
+    //Patrón Decorator
+    listaCompra.get().log()
 }//resetFormState
