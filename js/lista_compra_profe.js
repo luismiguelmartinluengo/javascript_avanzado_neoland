@@ -91,9 +91,9 @@ function addToShoppingList(){
     const nuevoArticulo = document.getElementById('articulo').value
 
     if(nuevoArticulo !== ''){
-        const nuevoObjetoArticulo = fabricaArticulos.createArticle(ARTICLE_TYPES.SIMPLE, nuevoArticulo)
+        const nuevoObjetoArticulo = fabricaArticulos.createTranslatedArticle(ARTICLE_TYPES.SIMPLE, nuevoArticulo)
         listaCompra.get().addItem(nuevoObjetoArticulo)
-        addToElementList(nuevoObjetoArticulo)
+        addToElementList(nuevoObjetoArticulo) //el profe pasa la propiedad name. Me gusta más pasar el objeto y que sea la función la que rescate el name
     }//End if
 }//End addToShoppingList
 
