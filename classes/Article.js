@@ -1,4 +1,4 @@
-import{ translateString } from '../utils/translate.js'
+import{ translate } from '../utils/translate.js'
 
 //Patrón: Factory
 class SimpleArticle{
@@ -61,8 +61,8 @@ export class ArticleFactory{
 function translateArticle(article){
     return {
         ...article, 
-        name: translateString(article.name)
-    }
+        name: translate.toEnglish(article.name)
+    }//
 }//End translateArticle
 
 

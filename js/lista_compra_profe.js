@@ -1,7 +1,7 @@
 import { ARTICLE_TYPES, ArticleFactory, articuloLeche } from "../classes/Article.js"
 import { ShoppingList } from "../classes/ShoppingList.js"
 import { LocalStore } from "../classes/LocalStore.js"
-import { logBasket } from "../classes/log.js"
+import { logBasket } from "../decorators/log.js"
 
 //Patron Factory
 const fabricaArticulos = new ArticleFactory
@@ -45,6 +45,8 @@ function onDOMContentLoaded(){
     botonNuevaLista.addEventListener('click', onNewListClick)
 
     loadShoppingList()
+    //Patron Observer
+    listaCompra.get().subscribe('formulario', 'add', addToElementList)
 }//End onDOMContentLoaded
 
 function onFormSubmit(e){
@@ -89,11 +91,9 @@ function loadShoppingList(){
 
 function addToShoppingList(){
     const nuevoArticulo = document.getElementById('articulo').value
-
     if(nuevoArticulo !== ''){
         const nuevoObjetoArticulo = fabricaArticulos.createTranslatedArticle(ARTICLE_TYPES.SIMPLE, nuevoArticulo)
-        listaCompra.get().addItem(nuevoObjetoArticulo)
-        addToElementList(nuevoObjetoArticulo) //el profe pasa la propiedad name. Me gusta más pasar el objeto y que sea la función la que rescate el name
+        listaCompra.get().addItem(nuevoObjetoArticulo) //Al estar suscrito el evento add de la ShoppingList, se ejecutará la función addToElementList ya que es el método callback pasado en la suscripción
     }//End if
 }//End addToShoppingList
 

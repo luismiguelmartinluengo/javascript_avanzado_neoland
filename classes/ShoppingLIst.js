@@ -1,12 +1,18 @@
 //Contiene la lógica de negocio de funcionamiento de la lista de la compra
+import { addStringValidation } from "../decorators/validate.js"
+
 export class ShoppingList{
 
     #basket
     #store
+    //Patrón Observer
+    #observers = []
 
     constructor(store){
         this.#store = store
         this.#basket = this.#store.items
+        //Patrón decorador: Esto añade el decorador a la instancia de ShoppingList. Ahora tiene capacidades para validar si un valor es un texto
+        addStringValidation(this)
     }//End constructor
 
     get basket(){
@@ -15,29 +21,64 @@ export class ShoppingList{
 
     _addDataStore(item){
         this.#store.addItem(item)
+        //Patrón observer
+        this._notifySubscriptors('add', item)
     }//End _addDataStore
 
     _resetDataStore(){
         this.#store.reset()
     }//End _resetDataStore
 
+    //Patrón observer
+    _notifySubscriptors(eventName, eventData){
+        this.#observers.forEach((subscriptor) => {
+            if (subscriptor.eventName === eventName){
+                subscriptor.callback(eventData)
+            }//End if
+        })
+    }//End 
+
     addItem(newItem){
-        if (typeof newItem.name === 'string'){
-            this.#basket.push(newItem)
+        // Sin decorador
+        // if (typeof newItem.name === 'string'){
+        //     this.#basket.push(newItem)
+        //     this._addDataStore(newItem)
+        // }else{
+        //     try{
+        //         throw new TypeError('Article debe tener un nombre (name)')
+        //     }catch (e){
+        //         console.error(e.name, e.message)
+        //         if (e instanceof TypeError) console.log(e.stack)
+        //     }//End try
+        // }//End if
+        //Patron decorator
+        if (this.validate.isString(newItem.name, "Nombre artículo")){
             this._addDataStore(newItem)
+            return true
         }else{
-            try{
-                throw new TypeError('Article debe tener un nombre (name)')
-            }catch (e){
-                console.error(e.name, e.message)
-                if (e instanceof TypeError) console.log(e.stack)
-            }//End try
+            return false
         }//End if
     }//End addItem
 
     emptyBasket(){
-        this.#basket = []
         this._resetDataStore()
     }//End emptyBasket
+
+
+    //Patron Observer
+    subscribe(subscriptor, eventName, callback){
+        //Forma concisa de crear el objeto cuando el nombre de la propiedad es igual al nombre de la variable que se pasa con el valor
+        this.#observers.push({subscriptor, eventName, callback})
+    }//End subscribe
+
+    //Patron Observer
+    unsubscribe(subscriptor, eventName){
+        this.#observers.find((observer, index) => {
+            if (observer.subscriptor === suscriptor && observer.eventName === eventName){
+                this.#observers.splice(index, 1)
+            }//End If
+        })
+    }//End unsusbscribe
+
 
 }//End ShoppingList
