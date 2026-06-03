@@ -5,6 +5,7 @@ class SimpleArticle{
 
     constructor(parName){
         this.name = parName
+        this.id = ''
     }//End  constructor
 
 }//End SimpleArticle

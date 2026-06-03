@@ -25,6 +25,12 @@ export class LocalStore{
         this._setDataToLocalStorage(this.#items)
     }//End addItem
 
+    removeItem(parItem) {
+        const index = this.#items.findIndex(loopItem => loopItem.id === parItem.id)
+        this.#items.splice(index, 1)
+        this._setDataToLocalStorage(this.#items)
+    }//End removeItem
+
     reset(){
         this.#items = []
         this._setDataToLocalStorage(this.#items)

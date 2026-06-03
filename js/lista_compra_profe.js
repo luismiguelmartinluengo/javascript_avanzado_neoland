@@ -46,7 +46,8 @@ function onDOMContentLoaded(){
 
     loadShoppingList()
     //Patron Observer
-    listaCompra.get().subscribe('formulario', 'add', addToElementList)
+    listaCompra.get().subscribe('formulario', 'add', addToElementsList)
+    listaCompra.get().subscribe('formulario', 'remove', removeFromElementsList)
 }//End onDOMContentLoaded
 
 function onFormSubmit(e){
@@ -84,7 +85,7 @@ function loadShoppingList(){
     
     if (listaCompra.get().basket.length > 0){
         for(let articulo of listaCompra.get().basket){
-            addToElementList(articulo)
+            addToElementsList(articulo)
         }//End for
     }//End if
 }//End loadShoppingList
@@ -97,13 +98,35 @@ function addToShoppingList(){
     }//End if
 }//End addToShoppingList
 
-function addToElementList(nuevoArticulo){
+function addToElementsList(nuevoArticulo){
     const listaArticulos = document.getElementById('lista')
     const elemento = document.createElement('li')
+    const boton = document.createElement('button')
     elemento.innerText = nuevoArticulo.name
+    elemento.id = nuevoArticulo.id
+    boton.innerText = 'BORRAR'
+    boton.addEventListener('click', removeFromShoppingList.bind(this, nuevoArticulo), {once: true})
+    elemento.appendChild(boton)
     listaArticulos.appendChild(elemento)
     resetFormState()
-}//End addToElementList
+}//End addToElementsList
+
+function removeFromShoppingList(parArticulo){
+    listaCompra.get().removeItem(parArticulo) //Al estar suscrito al evento remove de la ShoppingList, se ejecutar la función removeFronElementList
+}//End removeFromShoppingList
+
+function removeFromElementsList(parArticulo){
+    console.log('entra en removeFromElementsList')
+    console.log(parArticulo)
+    const listaArticulos = document.getElementById('lista')
+    for (const node of listaArticulos.children){
+        console.log('explora', node)
+        if (node.id === parArticulo.id){
+            console.log('va a eliminar', node)
+            listaArticulos.removeChild(node)
+        }//End if
+    }//End for
+}//End removeFromElementsList
 
 function resetShoppingList(){
     const listaArticulos = document.getElementById('lista')

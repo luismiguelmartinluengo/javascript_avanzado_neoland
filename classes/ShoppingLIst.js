@@ -25,6 +25,12 @@ export class ShoppingList{
         this._notifySubscriptors('add', item)
     }//End _addDataStore
 
+    _removeFronDataStore(parItem){
+        this.#store.removeItem(parItem)
+        //Patron observer
+        this._notifySubscriptors('remove', parItem)
+    }//End _removeFronDataStore
+
     _resetDataStore(){
         this.#store.reset()
     }//End _resetDataStore
@@ -53,6 +59,8 @@ export class ShoppingList{
         // }//End if
         //Patron decorator
         if (this.validate.isString(newItem.name, "Nombre artículo")){
+            const momento = new Date()
+            newItem.id = `${newItem.name}_${String(momento.getTime())}`
             this._addDataStore(newItem)
             return true
         }else{
@@ -63,6 +71,19 @@ export class ShoppingList{
     emptyBasket(){
         this._resetDataStore()
     }//End emptyBasket
+
+    removeItem(parItem){
+        if (typeof parItem.id === 'string'){
+            this._removeFronDataStore(parItem)
+        }else {
+            try{
+                throw new TypeError('Invalid Item ID')
+            }catch (e){
+                console.error(e.name, e.message)
+                if (e instanceof TypeError) console.log(e.stack)
+            }//End try
+        }//End if
+    }//End removeItem
 
 
     //Patron Observer
