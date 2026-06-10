@@ -1,4 +1,4 @@
-import{ translate } from '../utils/translate.js'
+import{ translate } from 'utils/translate'
 
 //Patrón: Factory
 class SimpleArticle{
@@ -15,8 +15,8 @@ class ComplexArticle extends SimpleArticle{
 
     constructor(parName, parQty, parPrice){
         super(parName)
-        this.qty = parQty
-        this.price = parPrice
+        this.qty = parQty || 1
+        this.price = parPrice || 0
     }//End constructor
 
 }//End ComplexArticle

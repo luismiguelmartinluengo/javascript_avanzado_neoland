@@ -1,3 +1,8 @@
+h1 span,
+li button {
+  float: right;
+}
+
 ul{
     border: 2px solid black;
     padding: 1rem;
@@ -5,6 +10,7 @@ ul{
 
 li{
     list-style-type: none;
+    padding: 5px;
 }
 
 ul li:first-child:has(+ li){

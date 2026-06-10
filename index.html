@@ -4,13 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Práctica del Master FullStack</title>
-    <script src="js/lista_compra_profe.js" defer></script>
-    <link rel="stylesheet" href="css/lista_compra_profe.css">
+    <script type="importmap">
+        {
+            "imports":{
+                "classes/Article":"./js/classes/Article.js",
+                "classes/ShoppingList":"./js/classes/ShoppingList.js",
+                "classes/LocalStore":"./js/classes/LocalStore.js",
+                "decorators/log":"./js/decorators/log.js",
+                "decorators/validate":"./js/decorators/validate.js",
+                "utils/translate":"./js/utils/translate.js"
+            }
+        }
+    </script>
+    <script type="module" src="js/index.js" defer></script>
+    <link rel="stylesheet" href="css/index.css">
 </head>
 <body>
-    <h1>Lista de la compra</h1>
+    <h1>Lista de la compra (profe) <span id="total"></span></h1>
     <form id="formulario">
         <input type="text" id="articulo" placeholder="Nuevo artículo">
+        <input type="number" id = "qty" placeholder="0" min="0" max="10" step="1">
+        <input type="number" id = "price" placeholder="0€" min="0" max="100" step="1">
         <button type="button" id="nuevoArticulo" disabled>Añadir</button>
         <button type="button" id="nuevaLista">Nueva lista de la compra</button>
     </form>

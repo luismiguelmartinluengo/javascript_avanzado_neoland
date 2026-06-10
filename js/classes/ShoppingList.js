@@ -1,5 +1,5 @@
 //Contiene la lógica de negocio de funcionamiento de la lista de la compra
-import { addStringValidation } from "../decorators/validate.js"
+import { addStringValidation } from "decorators/validate"
 
 export class ShoppingList{
 
@@ -9,14 +9,14 @@ export class ShoppingList{
     #observers = []
 
     constructor(store){
+        this.#basket = []
         this.#store = store
-        this.#basket = this.#store.items
         //Patrón decorador: Esto añade el decorador a la instancia de ShoppingList. Ahora tiene capacidades para validar si un valor es un texto
         addStringValidation(this)
     }//End constructor
 
     get basket(){
-        return this.#basket
+        return this.#store.items
     }//End get basket
 
     _addDataStore(item){
@@ -61,6 +61,8 @@ export class ShoppingList{
         if (this.validate.isString(newItem.name, "Nombre artículo")){
             const momento = new Date()
             newItem.id = `${newItem.name}_${String(momento.getTime())}`
+            newItem.qty = Number(newItem.qty)
+            newItem.price = Number(newItem.price)
             this._addDataStore(newItem)
             return true
         }else{
@@ -103,3 +105,12 @@ export class ShoppingList{
 
 
 }//End ShoppingList
+
+//Mixin
+export const withTotalMixin = {
+    getTotal() {
+        let total = 0
+        this.basket.forEach(item => total += item.price * item.qty ?? 0)
+        return total
+    }//End getTotal
+}//End withTotalMixin
