@@ -22,7 +22,8 @@
 <body>
     <h1>Lista de la compra (profe) <span id="total"></span></h1>
     <form id="formulario">
-        <input type="text" id="articulo" placeholder="Nuevo artículo">
+        <datalist id="productos"></datalist>
+        <input type="text" id="articulo" placeholder="Nuevo artículo" list="productos" autocomplete="off">
         <input type="number" id = "qty" placeholder="0" min="0" max="10" step="1">
         <input type="number" id = "price" placeholder="0€" min="0" max="100" step="1">
         <button type="button" id="nuevoArticulo" disabled>Añadir</button>

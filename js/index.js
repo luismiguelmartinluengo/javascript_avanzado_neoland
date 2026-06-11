@@ -1,40 +1,23 @@
-import { ARTICLE_TYPES, ArticleFactory } from "classes/Article" //importación por las claves del import map
-import { ShoppingList, withTotalMixin } from "classes/ShoppingList"
-import { LocalStore } from "classes/LocalStore"
-import { logBasket } from "decorators/log"
+import { ARTICLE_TYPES } from "classes/Article" //importación por las claves del import map
+import { simpleFetch } from "./utils/simpleFetch.js";
+
 
 //Patron Factory + importación dinámica de ArticleFactoy
 //Solo cuando se importe el módulo se instancia fabricaArticulos
 //const fabricaArticulos = new ArticleFactory
+//Con la importación dinámica se tiene que importar el módulo completo, no se puede
+//importar de forma selectiva, pero se mejor el rendimiento (carga) de la página porque se 
+//importa solo lo que se necesita y cuando se necesita
 let fabricaArticulos
 import('classes/Article').then((ModuloArticulo)=>{
     console.log(ModuloArticulo)
     fabricaArticulos = new ModuloArticulo.ArticleFactory
 });
 
-//Patron Singleton
-let listaCompra = (function(){
+//Patron Singleton --> se declara crea lista compra en un método específico de setup que contine
+//importaciones dinámicas de los módulos necesarios para la creación
+let listaCompra
 
-    function create(){
-        const dataStore = new LocalStore('lista-compra')
-        Object.assign(ShoppingList.prototype, withTotalMixin) //Esto añade la función de calculo de totales a objeto ShoppingList
-        return new ShoppingList(dataStore)
-    }//End create
-
-    let shoppingListInstance
-
-    return{
-        get: () =>{
-            if (!shoppingListInstance){
-                // Aquí se crea la instancia de lista de la compra a través de logbasket para añadirle el decorador
-                // que añade a la instancia el método log
-                shoppingListInstance = logBasket(create())
-            }//End if
-            return shoppingListInstance
-        }//end get
-    }
-
-})()
 
 
 document.addEventListener('DOMContentLoaded', onDOMContentLoaded)
@@ -52,10 +35,12 @@ function onDOMContentLoaded(){
     botonArticulo.addEventListener('click', onNewArticleClick)
     botonNuevaLista.addEventListener('click', onNewListClick)
 
-    loadShoppingList()
-    //Patron Observer
-    listaCompra.get().subscribe('formulario', 'add', addToElementsList)
-    listaCompra.get().subscribe('formulario', 'remove', removeFromElementsList)
+    getProducts()
+
+
+    //Dynamic import --> llevamos la importación de módulos necesarios para Shoppinglist al momento en el que se crea listacompra
+    setUpShoppingList()
+
 }//End onDOMContentLoaded
 
 function onFormSubmit(e){
@@ -97,6 +82,47 @@ function loadShoppingList(){
         }//End for
     }//End if
 }//End loadShoppingList
+
+function setUpShoppingList(){
+    Promise.all([
+        import('classes/ShoppingList'),
+        import('classes/LocalStore'),
+        import('decorators/log')    
+    ]).then((modules) => {
+        const ShoppingList = modules[0].ShoppingList
+        const withTotalMixin = modules[0].withTotalMixin
+        const LocalStore = modules[1].LocalStore
+        const logBasket = modules[2].logBasket
+
+        listaCompra = (function(){
+
+            function create(){
+                const dataStore = new LocalStore('lista-compra')
+                Object.assign(ShoppingList.prototype, withTotalMixin) //Esto añade la función de calculo de totales a objeto ShoppingList
+                return new ShoppingList(dataStore)
+            }//End create
+
+            let shoppingListInstance
+
+            return{
+                get: () =>{
+                    if (!shoppingListInstance){
+                        // Aquí se crea la instancia de lista de la compra a través de logbasket para añadirle el decorador
+                        // que añade a la instancia el método log
+                        shoppingListInstance = logBasket(create())
+                    }//End if
+                    return shoppingListInstance
+                }//end get
+            }
+
+        })()
+
+        loadShoppingList()
+        //Patron Observer
+        listaCompra.get().subscribe('formulario', 'add', addToElementsList)
+        listaCompra.get().subscribe('formulario', 'remove', removeFromElementsList)
+    })//End Promise
+}//End setUpShoppingList
 
 function addToShoppingList(){
     const nuevoArticulo = document.getElementById('articulo').value
@@ -167,3 +193,22 @@ function resetFormState(){
     //lo descativo, no lo voy a usar
     //listaCompra.get().log()
 }//resetFormState
+
+
+function getProducts() {
+    //Esta función recopila de una api (interna de pruebas) un listado de productos
+    //que se cargarán en el datalist definido en el html y qeu a su vez alimenta
+    //la lista desplegable de nuevo artículo
+    //const productosURL = 'https://dummyjson.com/products' //url de prueba para conectar con una api remota
+    const productsURL = 'api/articles.json' //api interna
+    simpleFetch(productsURL).then((listaProductos) => {
+        const dataListProductos = document.getElementById('productos')
+        console.log(listaProductos) //muestra lo que se ha recuperado
+        listaProductos.forEach((producto) => {
+            const opcion = document.createElement('option')
+            opcion.value = producto.name
+            dataListProductos.appendChild(opcion)
+        });
+    })
+
+}//End getProducts

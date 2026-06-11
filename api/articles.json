@@ -1,0 +1,32 @@
+[
+    {
+        "id":"1",
+        "name": "leche",
+        "qty": "12",
+        "price": "24"
+    },
+    {
+        "id":"2",
+        "name": "queso",
+        "qty": "6",
+        "price": "36"
+    },
+    {
+        "id":"3",
+        "name": "manzanas",
+        "qty": "10",
+        "price": "15"
+    },
+    {
+        "id":"4",
+        "name": "peras",
+        "qty": "4",
+        "price": "18"
+    },
+    {
+        "id":"5",
+        "name": "natillas",
+        "qty": "8",
+        "price": "22"
+    }
+]
