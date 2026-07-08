@@ -1,5 +1,12 @@
-import { HttpError } from "../classes/HttpError.js"
+//@ts-check
 
+import { HttpError } from "../classes/HttpError.js"
+/**
+ * 
+ * @param {string} url 
+ * @param {RequestInit} options[] 
+ * @returns 
+ */
 export async function simpleFetch(url, options){
     //Función que permite encapsular las operaciones fetch usando la clase HttpError (objeto Error mejorado)
     const resultado = await fetch(url, options)

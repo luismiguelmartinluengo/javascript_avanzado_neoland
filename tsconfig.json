@@ -1,0 +1,59 @@
+{
+  // Visit https://aka.ms/tsconfig to read more about this file
+  "include":["./js/**/.js"],
+  "exclude":["./**/_hidden/**/*"],
+  "compileOnSave": false,
+  "compilerOptions": {
+    // File Layout
+    // "rootDir": "./src",
+    // "outDir": "./dist",
+
+    // Environment Settings
+    // See also https://aka.ms/tsconfig/module
+    "module": "ES2022",
+    "target": "esnext",
+    "types": [],
+    // For nodejs:
+    // "lib": ["esnext"],
+    // "types": ["node"],
+    // and npm install -D @types/node
+
+    // Other Outputs
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true,
+
+    // Stricter Typechecking Options
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+
+    // Style Options
+    // "noImplicitReturns": true,
+    // "noImplicitOverride": true,
+    // "noUnusedLocals": true,
+    // "noUnusedParameters": true,
+    // "noFallthroughCasesInSwitch": true,
+    // "noPropertyAccessFromIndexSignature": true,
+
+    // Recommended Options
+    "strict": true,
+    "jsx": "react-jsx",
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "noUncheckedSideEffectImports": true,
+    "moduleDetection": "force",
+    "skipLibCheck": true,
+    "allowJs": true,
+    "noEmit": true,
+    //para que entienda la rutas relativas del mapa de importación.
+    //no me gusta el mapa junto ts porque para definir los tipos no te sirven mapas de importacion, tienen que ser rutas reales, 
+    //así que no sirve de nada definir un mapa de importación si al final vas a tener que definir también las rutas reales, con 
+    "baseUrl": ".",
+    "paths":{
+      "classes/*": ["./js/classes/*"],
+      "decorators/*": ["./js/decorators/*"],
+      "utils/*": ["./js/utils/*"]
+    }
+
+  }
+}

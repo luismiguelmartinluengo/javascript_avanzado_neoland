@@ -1,3 +1,4 @@
+//@ts-check
 
 //Sin patrón command
 // export function translateString(parString){
@@ -9,10 +10,12 @@
 //Patrón Command
 class Translator{
 
+    /** @param {string} parString  */
     toEnglish(parString){
         return `[ES > EN] ${parString}`
     }//End toEnglish
 
+    /** @param {string} parString  */
     toFrench(parString){
         return `[ES > RF] ${parString}`
     }//End toEnglish

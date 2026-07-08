@@ -1,8 +1,15 @@
+//@ts-check
+
+/**
+ * @module Article
+ */
+//@ts-ignore
 import{ translate } from 'utils/translate'
 
 //Patrón: Factory
 class SimpleArticle{
 
+    /** @param {string} parName*/
     constructor(parName){
         this.name = parName
         this.id = ''
@@ -11,8 +18,13 @@ class SimpleArticle{
 }//End SimpleArticle
 
 //Herencia
-class ComplexArticle extends SimpleArticle{
+export class ComplexArticle extends SimpleArticle{
 
+    /**
+     * @param {string} parName 
+     * @param {number} parQty
+     * @param {number} parPrice
+    */
     constructor(parName, parQty, parPrice){
         super(parName)
         this.qty = parQty || 1
@@ -35,6 +47,13 @@ export const ARTICLE_TYPES = {
 
 export class ArticleFactory{
 
+    /**
+     * @param {string} parType 
+     * @param {string} parName 
+     * @param {number} parQty 
+     * @param {number} parPrice 
+     * @returns {SimpleArticle | ComplexArticle}
+     */
     createArticle(parType, parName, parQty, parPrice){
         switch (parType) {
             case ARTICLE_TYPES.COMPLEX:
@@ -45,6 +64,15 @@ export class ArticleFactory{
         }//End switch 
     }//End createArticle
 
+
+    /**
+     * Crea un artículo con el nombre traducido
+     * @param {string} parType 
+     * @param {string} parName 
+     * @param {number} parQty 
+     * @param {number} parPrice 
+     * @returns {SimpleArticle | ComplexArticle}
+     */
     createTranslatedArticle(parType, parName, parQty, parPrice){
         switch (parType) {
             case ARTICLE_TYPES.COMPLEX:
@@ -58,7 +86,11 @@ export class ArticleFactory{
 
 }//End ArticleFactory
 
-
+/**
+ * traduce un artículo
+ * @param {SimpleArticle | ComplexArticle} article 
+ * @returns {SimpleArticle | ComplexArticle}
+ */
 function translateArticle(article){
     return {
         ...article, 
