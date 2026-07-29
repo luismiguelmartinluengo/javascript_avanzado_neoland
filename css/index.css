@@ -1,16 +1,35 @@
 h1 span,
-li button {
-  float: right;
+button[type="reset"]{
+    float: right;
 }
+
 
 ul{
     border: 2px solid black;
-    padding: 1rem;
+    padding: 1em;
 }
 
 li{
     list-style-type: none;
-    padding: 5px;
+    &:has(+ li){
+        margin: 0, 0, 1em
+    }
+    &.bought{
+        .articulo{
+            text-decoration: line-through;
+        }
+    }
+}
+
+.articulo{
+    display: inline-block;
+    line-height: 2em;
+    padding: 0 .5em;
+    border: 1px dotted black;
+    &:hover{
+        background-color: lightblue;
+        cursor: pointer;
+    }
 }
 
 ul li:first-child:has(+ li){
@@ -19,4 +38,23 @@ ul li:first-child:has(+ li){
 
 button{
     cursor: pointer
+}
+
+li button{
+    line-height: 2em;
+    margin-left: 1em;
+    float: right;
+}
+
+input[type="number"]{
+  text-align: right;
+}
+
+form{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    fieldset{
+        flex-grow: 1;
+    }
 }

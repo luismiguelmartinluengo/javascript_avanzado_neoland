@@ -4,6 +4,8 @@
 import { ARTICLE_TYPES } from "classes/Article" //importación por las claves del import map
 //@ts-ignore - typscript no se lleva bien con rutas mapeadas, esto funciona, pasamos de typescript
 import { simpleFetch } from "utils/simpleFetch";
+//@ts-ignore - typscript no se lleva bien con rutas mapeadas, esto funciona, pasamos de typescript
+import { INITIAL_STATE, store} from "store/redux"; //importación por las claves del import map
 
 
 //Patron Factory + importación dinámica de ArticleFactoy
@@ -163,7 +165,7 @@ function addToShoppingList(){
 /** @param {Article} nuevoArticulo*/
 function addToElementsList(nuevoArticulo){
     const listaArticulos = document.getElementById('lista')
-    if (listaArticulos instanceof HTMLInputElement){
+    if (listaArticulos !== null){
         const elemento = document.createElement('li')
         const boton = document.createElement('button')
         let elementText = nuevoArticulo.name

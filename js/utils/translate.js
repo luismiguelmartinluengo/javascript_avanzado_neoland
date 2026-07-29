@@ -17,8 +17,8 @@ class Translator{
 
     /** @param {string} parString  */
     toFrench(parString){
-        return `[ES > RF] ${parString}`
-    }//End toEnglish
+        return `[ES > FR] ${parString}`
+    }//End toFrench
 
     //Otros idiomas...
 

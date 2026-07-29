@@ -78,7 +78,6 @@ export class ShoppingList{
     _notifySubscriptors(eventName, eventData){
         this.#observers.forEach((subscriptor) => {
             if (subscriptor.eventName === eventName){
-                console.log(subscriptor, eventName, eventData)
                 subscriptor.callback(eventData)
             }//End if
         })
